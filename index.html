@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🐔 Pollos COB500</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <h1>🐔 MANEJO DE POLLOS COB500</h1>
+        
+        <div class="cards">
+            <div class="card blue">
+                <h3>Pollos vivos</h3>
+                <p id="pollos-vivos">0</p>
+            </div>
+            <div class="card red">
+                <h3>Pollos muertos</h3>
+                <p id="pollos-muertos">0</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Iniciar nueva crianza</label>
+            <input type="number" id="pollos-iniciales" placeholder="Cantidad de pollos">
+            <button onclick="iniciarCrianza()">🟢 Iniciar</button>
+        </div>
+
+        <div class="form-group">
+            <label>Registrar pollos muertos hoy</label>
+            <input type="number" id="muertos-hoy" placeholder="Número de muertos" min="0">
+            <button onclick="registrarMuertos()">✍️ Registrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Datos guardados en el navegador (persisten al recargar)
+        let datos = JSON.parse(localStorage.getItem('pollos')) || {
+            pollosIniciales: 0,
+            pollosMuertos: 0
+        };
+
+        function actualizarPantalla() {
+            document.getElementById('pollos-vivos').textContent = datos.pollosIniciales - datos.pollosMuertos;
+            document.getElementById('pollos-muertos').textContent = datos.pollosMuertos;
+        }
+
+        function iniciarCrianza() {
+            const cantidad = parseInt(document.getElementById('pollos-iniciales').value);
+            if (cantidad > 0) {
+                datos.pollosIniciales = cantidad;
+                datos.pollosMuertos = 0;
+                localStorage.setItem('pollos', JSON.stringify(datos));
+                actualizarPantalla();
+                alert("¡Crianza iniciada!");
+            }
+        }
+
+        function registrarMuertos() {
+            const muertos = parseInt(document.getElementById('muertos-hoy').value) || 0;
+            datos.pollosMuertos += muertos;
+            localStorage.setItem('pollos', JSON.stringify(datos));
+            actualizarPantalla();
+        }
+
+        // Cargar datos al inicio
+        actualizarPantalla();
+    </script>
+</body>
+</html>
